@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { Html5QrcodeScanner } from 'html5-qrcode';
 
 interface QRScannerProps {
@@ -9,7 +9,6 @@ interface QRScannerProps {
 }
 
 const QRScanner = ({ onResult, onError }: QRScannerProps) => {
-  const [isScanning, setIsScanning] = useState(false);
   const scannerRef = useRef<Html5QrcodeScanner | null>(null);
 
   useEffect(() => {
@@ -26,7 +25,6 @@ const QRScanner = ({ onResult, onError }: QRScannerProps) => {
     scannerRef.current.render(
       (decodedText) => {
         onResult(decodedText);
-        setIsScanning(false);
       },
       (errorMessage) => {
         if (onError) {
