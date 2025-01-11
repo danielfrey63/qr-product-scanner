@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from "react";
-import QRScannerWrapper from './components/QRScannerWrapper';
+import QRScannerInterface from './components/QRScannerInterface';
 
 export default function Home() {
   const [lastScan, setLastScan] = useState<string | null>(null);
@@ -15,12 +15,12 @@ export default function Home() {
               QR Scanner
             </h1>
             <p className="text-gray-600 dark:text-gray-300">
-              Point your camera at a QR code to scan
+              Scan QR codes using your camera or upload an image
             </p>
           </div>
 
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 mb-6">
-            <QRScannerWrapper
+            <QRScannerInterface
               onResult={(result) => {
                 setLastScan(result);
               }}

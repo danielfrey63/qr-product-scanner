@@ -18,10 +18,14 @@ const QRScanner = ({ onResult, onError }: QRScannerProps) => {
         fps: 10,
         qrbox: { width: 250, height: 250 },
         aspectRatio: 1.0,
+        showTorchButtonIfSupported: true,
+        showZoomSliderIfSupported: true,
+        defaultZoomValueIfSupported: 2
       },
       false
     );
 
+    // Start scanning automatically
     scannerRef.current.render(
       (decodedText) => {
         onResult(decodedText);
@@ -43,7 +47,6 @@ const QRScanner = ({ onResult, onError }: QRScannerProps) => {
   return (
     <div className="w-full max-w-md mx-auto">
       <div id="qr-reader" className="rounded-lg overflow-hidden" />
-      <div id="qr-reader-results" />
     </div>
   );
 };
