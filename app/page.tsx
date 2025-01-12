@@ -1,49 +1,72 @@
 'use client';
 
-import { useState } from "react";
+import Image from 'next/image';
 import QRScannerInterface from './components/QRScannerInterface';
+import { useState } from 'react';
+
+interface RegisteredProduct {
+  code: string;
+  amount: number;
+}
 
 export default function Home() {
-  const [lastScan, setLastScan] = useState<string | null>(null);
+  const [registeredProducts, setRegisteredProducts] = useState<RegisteredProduct[]>([]);
+
+  const handleProductRegistered = (code: string, amount: number) => {
+    setRegisteredProducts(prev => [...prev, { code, amount }]);
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 dark:from-gray-900 dark:to-gray-800">
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-2xl mx-auto">
-          <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-gray-800 dark:text-white mb-2">
-              QR Scanner
-            </h1>
-            <p className="text-gray-600 dark:text-gray-300">
-              Scan QR codes using your camera or upload an image
-            </p>
-          </div>
-
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 mb-6">
-            <QRScannerInterface
-              onResult={(result) => {
-                setLastScan(result);
-              }}
-              onError={(error) => {
-                console.error(error);
-              }}
+    <main className="flex min-h-screen flex-col items-center p-4 md:p-8">
+      <div className="w-full max-w-md mx-auto">
+        <div className="flex flex-col items-center mb-8">
+          <div className="flex items-center gap-4 mb-2">
+            <Image
+              src="/fci.svg"
+              alt="FCI Logo"
+              width={40}
+              height={40}
+              priority
+              className="dark:invert"
             />
+            <h1 className="text-4xl font-bold text-gray-800 dark:text-white">
+              Scanner
+            </h1>
           </div>
+        </div>
 
-          {lastScan && (
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 animate-fade-in">
-              <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-2">
-                Last Scan Result
+        <div className="mb-8">
+          <QRScannerInterface
+            onResult={handleProductRegistered}
+            onError={(error) => console.error(error)}
+          />
+        </div>
+
+        {registeredProducts.length > 0 ? (
+          <div className="w-full">
+            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                Registered Products
               </h2>
-              <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-                <p className="text-gray-700 dark:text-gray-300 break-all font-mono">
-                  {lastScan}
-                </p>
+              <div className="space-y-3">
+                {registeredProducts.map((product, index) => (
+                  <div 
+                    key={index}
+                    className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
+                  >
+                    <code className="text-sm font-mono text-blue-600 dark:text-blue-400">
+                      {product.code}
+                    </code>
+                    <span className="text-sm text-gray-600 dark:text-gray-300">
+                      Quantity: {product.amount}
+                    </span>
+                  </div>
+                ))}
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        ) : null}
       </div>
-    </div>
+    </main>
   );
 }
